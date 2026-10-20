@@ -966,7 +966,16 @@ int WINAPI wWinMain(HINSTANCE inst, HINSTANCE, LPWSTR cmdline, int) {
     wc.hCursor       = LoadCursor(nullptr, IDC_ARROW);
     wc.hbrBackground = (HBRUSH)(COLOR_BTNFACE + 1);
     wc.lpszClassName = L"TtsEngineCGui";
-    wc.hIcon         = LoadIcon(nullptr, IDI_APPLICATION);
+    /* Resource id 1 = the multi-size icon embedded by src/resources/app.rc, so
+     * the caption, taskbar and Alt+Tab all show the product icon rather than
+     * the generic Windows one. */
+    wc.hIcon         = (HICON)LoadImageW(inst, MAKEINTRESOURCEW(1), IMAGE_ICON,
+                                         GetSystemMetrics(SM_CXICON),
+                                         GetSystemMetrics(SM_CYICON), 0);
+    wc.hIconSm       = (HICON)LoadImageW(inst, MAKEINTRESOURCEW(1), IMAGE_ICON,
+                                         GetSystemMetrics(SM_CXSMICON),
+                                         GetSystemMetrics(SM_CYSMICON), 0);
+    if (!wc.hIcon) wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
     RegisterClassExW(&wc);
     trace("class ok");
 

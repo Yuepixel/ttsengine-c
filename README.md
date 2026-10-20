@@ -10,6 +10,8 @@ voices) and a Win32 control panel.
 > 非官方项目，与阿里巴巴 / Qwen 团队、以及上游 [qwentts.cpp](https://github.com/ServeurpersoCom/qwentts.cpp) 作者均无隶属关系。
 > Unofficial project, not affiliated with Alibaba/Qwen or the upstream authors.
 
+![TtsEngine-C desktop panel](docs/gui.png)
+
 ---
 
 ## 1. 功能
@@ -21,6 +23,8 @@ voices) and a Win32 control panel.
 - 语速：`rate >= 1.0` 做 WSOLA 压缩；`rate < 1.0` **不降速拉伸**（见 §7）。
 - Win32 GUI：启动/停止服务、状态与日志、音色数量、试音、配置编辑；另有
   无窗口启动器 `ttsc-launch.exe` 与控制台入口 `ttsc-server.exe`。
+- 全部可执行文件带图标与版本信息（`src/resources/app.rc`，图标 16–256 px 六种尺寸；
+  图标由 `tools/gen_icon.c` 生成，无第三方依赖）。
 
 ## 2. 目录结构
 
@@ -37,8 +41,9 @@ src/
   main.cpp        控制台服务入口（ttsc-server）
   gui_main.cpp    Win32 面板（ttsc-gui）
   launch_main.cpp 无窗口启动器（ttsc-launch）
+  resources/      Win32 资源：app.rc（图标 + 版本信息）+ app.ico（多尺寸）
 tests/            单元测试（ttsc-tests，纯 CPU 可跑）
-tools/            构建、部署、基准与音色预设生成脚本
+tools/            构建、部署、基准、图标生成与音色预设生成脚本
 ```
 
 ## 3. 构建
@@ -82,6 +87,14 @@ pwsh -NoProfile -File tools\build.ps1 -Clean         # 先清构建目录
 > 注意：`ggml.dll → ggml-cuda.dll → cublas64_13.dll` 是加载期导入链。
 > 直接用资源管理器双击 GUI 时，请让 CUDA 的 `bin` 在 `PATH` 里（安装器会设置
 > `CUDA_PATH`），或改用 `ttsc-launch.exe` / `run.cmd`。
+
+图标已随源码提供（`src/resources/app.ico`），构建时由 `app.rc` 嵌入，无需额外步骤。
+需要改图标时编辑 `tools/gen_icon.c` 的绘制参数后重新生成：
+
+```powershell
+gcc -O2 -o tools\gen_icon.exe tools\gen_icon.c
+tools\gen_icon.exe src\resources\app.ico
+```
 
 ## 4. 模型
 

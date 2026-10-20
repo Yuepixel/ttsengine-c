@@ -1,0 +1,59 @@
+/* =============================================================================
+ *  app.rc - Win32 resources for every TtsEngine-C executable
+ *
+ *  One resource script is shared by ttsc-server, ttsc-gui, ttsc-launch,
+ *  ttsc-tests and qwen-tts (see CMakeLists.txt). Per-target strings are
+ *  injected as preprocessor definitions so the individual exes still show a
+ *  meaningful description in Explorer / Task Manager:
+ *
+ *      TTSC_FILE_DESC   FileDescription  ("TtsEngine-C desktop panel", ...)
+ *      TTSC_ORIG_NAME   OriginalFilename ("ttsc-gui.exe", ...)
+ *
+ *  All text is ASCII on purpose: rc.exe is invoked with the system code page.
+ * ========================================================================== */
+#include <winver.h>
+
+#ifndef TTSC_ICON_PATH
+#define TTSC_ICON_PATH "app.ico"
+#endif
+#ifndef TTSC_FILE_DESC
+#define TTSC_FILE_DESC "TtsEngine-C local text-to-speech service"
+#endif
+#ifndef TTSC_ORIG_NAME
+#define TTSC_ORIG_NAME "ttsc-server.exe"
+#endif
+
+/* The shell picks the closest frame for the requested size; keep every size
+ * Explorer, the taskbar and dialogs can ask for. Resource id 1 = the default
+ * application icon (numeric id; an undefined identifier would silently become 0). */
+1 ICON TTSC_ICON_PATH
+
+/* Version block. Keep in sync with `project(TtsEngineC VERSION ...)`. */
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION    0,4,0,0
+ PRODUCTVERSION 0,4,0,0
+ FILEFLAGSMASK  0x3fL
+ FILEFLAGS      0x0L
+ FILEOS         VOS_NT_WINDOWS32
+ FILETYPE       VFT_APP
+ FILESUBTYPE    VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName",      "TtsEngine-C contributors"
+            VALUE "FileDescription",  TTSC_FILE_DESC
+            VALUE "FileVersion",      "0.4.0.0"
+            VALUE "InternalName",     "ttsc"
+            VALUE "LegalCopyright",   "MIT License"
+            VALUE "OriginalFilename", TTSC_ORIG_NAME
+            VALUE "ProductName",      "TtsEngine-C"
+            VALUE "ProductVersion",   "0.4.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

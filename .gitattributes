@@ -2,10 +2,14 @@
 * text=auto
 
 *.cpp  text
+*.c    text
 *.h    text
 *.inc  text
+*.rc   text
 *.md   text
 *.ps1  text eol=crlf
 *.cmd  text eol=crlf
 *.py   text
 *.ini  text
+*.ico  binary
+*.png  binary

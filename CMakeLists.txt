@@ -15,7 +15,7 @@
 # =============================================================================
 cmake_minimum_required(VERSION 3.20)
 
-project(TtsEngineC LANGUAGES C CXX)
+project(TtsEngineC VERSION 0.4.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -162,3 +162,35 @@ if(TTSC_BUILD_TESTS)
     endif()
     add_test(NAME ttsc-tests COMMAND ttsc-tests)
 endif()
+
+# -----------------------------------------------------------------------------
+#  Win32 resources (icon + version info) for every executable
+# -----------------------------------------------------------------------------
+# A single resource script (src/resources/app.rc) embeds the multi-size icon and
+# the version block; per-target preprocessor definitions give each exe its own
+# FileDescription/OriginalFilename. Driven from here rather than from each
+# add_executable so the set of binaries stays in one place.
+set(TTSC_RC "${CMAKE_CURRENT_SOURCE_DIR}/src/resources/app.rc")
+set(TTSC_ICON "${CMAKE_CURRENT_SOURCE_DIR}/src/resources/app.ico")
+
+function(ttsc_add_win_resources _target _desc _origname)
+    if(NOT WIN32 OR NOT MSVC)
+        return()
+    endif()
+    if(NOT TARGET ${_target})
+        return()
+    endif()
+    target_sources(${_target} PRIVATE "${TTSC_RC}")
+    # Forward slashes: rc.exe accepts them and they need no escaping in a -D.
+    target_compile_definitions(${_target} PRIVATE
+        "TTSC_ICON_PATH=\"${TTSC_ICON}\""
+        "TTSC_FILE_DESC=\"${_desc}\""
+        "TTSC_ORIG_NAME=\"${_origname}\"")
+    set_source_files_properties("${TTSC_RC}" PROPERTIES OBJECT_DEPENDS "${TTSC_ICON}")
+endfunction()
+
+ttsc_add_win_resources(ttsc-server "TtsEngine-C service (HTTP TTS)"      "ttsc-server.exe")
+ttsc_add_win_resources(ttsc-gui    "TtsEngine-C desktop panel"           "ttsc-gui.exe")
+ttsc_add_win_resources(ttsc-launch "TtsEngine-C launcher (CUDA PATH)"    "ttsc-launch.exe")
+ttsc_add_win_resources(ttsc-tests  "TtsEngine-C unit tests"              "ttsc-tests.exe")
+ttsc_add_win_resources(qwen-tts    "Qwen3-TTS CLI (qwentts.cpp)"         "qwen-tts.exe")

@@ -41,7 +41,14 @@ Copy-Item (Join-Path $src "ttsc-server.exe") $dst -Force
 Copy-Item (Join-Path $src "ttsc-tests.exe")  $dst -Force
 Copy-Item (Join-Path $src "qwen-tts.exe")    $dst -Force
 Copy-Item (Join-Path $src "*.dll")           $dst -Force
-Copy-Item $Ini (Join-Path $dst "ttsserver.ini") -Force
+# Re-deploying onto an existing deploy\ folder resolves -Ini to the destination
+# file itself; copying a file onto itself throws, so skip it.
+$dstIni = Join-Path $dst "ttsserver.ini"
+if (-not [string]::Equals([IO.Path]::GetFullPath($Ini),
+                          [IO.Path]::GetFullPath($dstIni),
+                          [StringComparison]::OrdinalIgnoreCase)) {
+    Copy-Item $Ini $dstIni -Force
+}
 
 $runner = @'
 @echo off
