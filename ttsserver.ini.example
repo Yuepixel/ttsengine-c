@@ -1,0 +1,44 @@
+# TtsEngine-C example configuration.
+# Copy to ttsserver.ini next to the executable (or pass -c <path>).
+# Keys shared with the legacy Python server are intentionally compatible;
+# unknown keys are ignored, so one file can serve both implementations.
+
+# --- models ---------------------------------------------------------------
+# Directory holding the three GGUF files (see README section 4).
+models_root = models
+# Optional explicit overrides (usually derived from models_root):
+# base_gguf   = models/qwen-talker-1.7b-base-Q8_0.gguf
+# design_gguf = models/qwen-talker-1.7b-voicedesign-Q8_0.gguf
+# codec_gguf  = models/qwen-tokenizer-12hz-Q8_0.gguf
+
+# --- runtime data ---------------------------------------------------------
+# Voice registry (voices.json plus one folder per voice).
+data_dir = data
+
+# --- network --------------------------------------------------------------
+host = 127.0.0.1
+port = 8081
+
+# --- engine ---------------------------------------------------------------
+# CUDA device string; leave empty to let the backend pick.
+device = CUDA0
+# Internal batch size; requests beyond this queue up.
+max_batch = 2
+# Queue slots; requests beyond this are rejected with HTTP 429.
+max_queue = 8
+# Per-request synthesis budget in seconds (applies to /tts; 504 on timeout).
+synth_timeout = 60
+language = Chinese
+temperature = 0.7
+
+# --- features -------------------------------------------------------------
+# Expose /tts/pcm (streaming PCM) in /health and on the wire.
+stream = 0
+# Allow rate != 1 on /tts/pcm (off = 422, matching the legacy server).
+stream_stretch = 0
+# Enable rate-based time stretching (compression only; rate < 1 is clamped).
+time_stretch = 1
+# Print one line per request (voice, rate, characters, duration).
+debug = 0
+# Keep /perf statistics.
+perf = 1

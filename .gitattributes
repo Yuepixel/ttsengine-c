@@ -1,0 +1,11 @@
+# Normalize line endings on commit; keep the working tree as-is.
+* text=auto
+
+*.cpp  text
+*.h    text
+*.inc  text
+*.md   text
+*.ps1  text eol=crlf
+*.cmd  text eol=crlf
+*.py   text
+*.ini  text

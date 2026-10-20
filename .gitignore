@@ -1,0 +1,36 @@
+# ---- build trees ----
+build/
+build-*/
+deploy/
+out/
+*.obj
+*.pdb
+*.ilk
+*.exp
+*.lib
+*.exe
+*.dll
+
+# ---- runtime artifacts ----
+logs/
+*.log
+voices_cache/
+data/
+*.wav.tmp
+.models-stamp
+
+# ---- vendored engine ----
+# Upstream qwentts.cpp (MIT) is fetched into third_party/, not vendored in git.
+# Recorded version: 5916bf7 (2026-10-16), ggml 0.27.0 commit 5916bf7.
+third_party/
+
+# ---- IDE ----
+.vs/
+.vscode/
+.idea/
+CMakeUserPresets.json
+
+# ---- python helper (model conversion only) ----
+.venv/
+__pycache__/
+*.pyc

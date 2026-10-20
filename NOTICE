@@ -1,0 +1,26 @@
+TtsEngine-C
+Copyright (c) 2026 TtsEngine-C contributors
+
+This product includes software developed by third parties. The components,
+their pinned versions and licenses are listed in THIRD_PARTY_NOTICES.md.
+
+Summary
+-------
+* TtsEngine-C itself is licensed under the MIT License (see LICENSE).
+* The inference engine is the upstream project ServeurpersoCom/qwentts.cpp
+  (MIT, https://github.com/ServeurpersoCom/qwentts.cpp), checked out at
+  commit 5916bf7 (2026-10-16). It is NOT vendored into this repository; tools/
+  fetch_upstream.ps1 reproduces the exact tree under third_party/qwentts.cpp.
+  TtsEngine-C links against it through its C ABI and does not modify it.
+* ggml (MIT), cpp-httplib (MIT) and yyjson (MIT) are used through that upstream
+  tree.
+* Qwen3-TTS 1.7B and the 12 Hz tokenizer are released by the Qwen team under
+  Apache-2.0. Model weights are NOT distributed with this repository; users
+  download or convert them separately and remain bound by the model licenses.
+
+Trademarks and affiliation
+--------------------------
+TtsEngine-C is an independent project. It is not affiliated with, endorsed by,
+or sponsored by Alibaba Group, the Qwen team, or the authors of
+ServeurpersoCom/qwentts.cpp, ggml, cpp-httplib or yyjson. Product names are
+used only to describe compatibility and provenance.
